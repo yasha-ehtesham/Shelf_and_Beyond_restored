@@ -1,0 +1,115 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+<div class="centered-content">
+    {% if request.session.user_id %}
+
+        <!-- Adoption Metrics Section -->
+        <div class="metrics">
+            <h2>Your Adoption Stats</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <h3>Total Pets Listed</h3>
+                    <p>{{ total_pets_listed }}</p>
+                </div>
+                <div class="metric-box">
+                    <h3>Pets Adopted Out</h3>
+                    <p>{{ pets_adopted_out }}</p>
+                </div>
+                <div class="metric-box">
+                    <h3>Pets You Adopted</h3>
+                    <p>{{ pets_adopted_by_you }}</p>
+                </div>
+                <div class="metric-box">
+                    <h3>Applications Submitted</h3>
+                    <p>{{ applications_submitted }}</p>
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <!-- Successful Adoptions Section -->
+        <div class="adoptions">
+            <h2>Your Successful Adoptions</h2>
+            <h3>Adoptions</h3>
+            {% if successful_adoptions %}
+                <table class="adoption-table">
+                    <thead>
+                        <tr>
+                            <th>Pet Title</th>
+                            <th>Adopter</th>
+                            <th>Shelter/Seller</th>
+                            <th>Application Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for adoption in successful_adoptions %}
+                            <tr>
+                                <td>{{ adoption.pet.title }}</td>
+                                <td>{{ adoption.applicant.firstname }} {{ adoption.applicant.lastname }}</td>
+                                <td>{{ adoption.pet.seller.firstname }} {{ adoption.pet.seller.lastname }}</td>
+                                <td>{{ adoption.created_at|date:"F d, Y H:i" }}</td>
+                                <td>{{ adoption.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No successful adoptions yet.</p>
+            {% endif %}
+            <br>
+        </div>
+
+    {% else %}
+        <p>Please log in to view your adoption stats and history.</p>
+    {% endif %}
+</div>
+
+<style>
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .metric-box {
+        background-color: #d1a66d;
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .metric-box h3 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+    .metric-box p {
+        font-size: 1.5em;
+        margin: 0;
+    }
+    .adoptions {
+        margin-top: 30px;
+    }
+    .adoption-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fef1dd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .adoption-table th, .adoption-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #d9b27f;
+    }
+    .adoption-table th {
+        background-color: #ba8c63;
+        color: white;
+    }
+    .adoption-table tr:last-child td {
+        border-bottom: none;
+    }
+</style>
+{% endblock %}

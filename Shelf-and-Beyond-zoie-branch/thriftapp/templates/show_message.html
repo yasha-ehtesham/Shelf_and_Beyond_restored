@@ -1,0 +1,92 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Conversations</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .centered-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgb(241, 214, 180);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #ba8c63;
+            text-align: center;
+        }
+        .conversation {
+            border-bottom: 1px solid #d9b27f;
+            padding: 15px 0;
+            margin-bottom: 15px;
+        }
+        .conversation:last-child {
+            border-bottom: none;
+        }
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .conversation-content {
+            margin: 10px 0;
+            color: #333;
+        }
+        .conversation-sender {
+            font-weight: bold;
+            color: #ba8c63;
+        }
+        .no-conversations {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #d1a66d;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .back-btn:hover {
+            background-color: #ba8c63;
+        }
+    </style>
+</head>
+<body>
+<div class="centered-content">
+    <h1>My Conversations</h1>
+    
+    {% if conversations %}
+        {% for conv in conversations %}
+            <div class="conversation">
+                <div class="conversation-header">
+                    <span>
+                        <span class="conversation-sender">
+                            {{ conv.other_user.username }}
+                        </span>
+                        ({{ conv.other_user.firstname }} {{ conv.other_user.lastname }})
+                    </span>
+                    <span>{{ conv.latest_message.timestamp|date:"F d, Y H:i" }}</span>
+                </div>
+                <a href="{% url 'view_conversation' conv.other_user.web_user_id %}" class="back-btn">View Conversation</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-conversations">You have no conversations.</p>
+    {% endif %}
+    
+    <a href="{% url 'welcome_page' %}" class="back-btn">Back to browser</a>
+</div>
+</body>
+</html>
+{% endblock %}

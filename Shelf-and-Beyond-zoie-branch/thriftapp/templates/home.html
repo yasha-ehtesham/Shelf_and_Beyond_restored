@@ -1,0 +1,46 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+<div class="overlay-box">
+    <div class="form-container centered-content">
+        <h1 style="color: white; text-shadow: 1px 1px 2px #000;">Welcome, {{ user.firstname }} {{ user.lastname }}</h1>
+
+        {% if request.session.user_id %}
+            <div class="list-buttons" style="display: flex; flex-direction: column; gap: 20px; margin-top: 20px;">
+                <div class="button-container">
+                    <form action="{% url 'create_listing' %}" method="get">
+                        <button type="submit" class="create_listing">CREATE LISTING</button>
+                    </form>
+                </div>
+
+                <div class="button-container">
+                    <form action="{% url 'interaction_history' %}" method="get">
+                        <button type="submit" class="interaction_history">VIEW ALL HISTORY</button>
+                    </form>
+                </div>
+
+                <div class="button-container">
+                    <form action="{% url 'stats_and_transactions' %}" method="get">
+                        <button type="submit" class="stats-and-trans">STATS AND TRANS</button>
+                    </form>
+                </div>
+
+                <div class="button-container">
+                    <form action="{% url 'adoption_stats' %}" method="get">
+                        <button type="submit" class="adoption-stats">ADOPTION STATS</button>
+                    </form>
+                </div>
+
+                <div class="button-container">
+                    <form action="{% url 'pet_adoption' %}" method="get">
+                        <button type="submit" class="pet_adoption">PET ADOPTION</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p style="color: white; text-shadow: 1px 1px 2px #000;">Please log in to view your dashboard.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

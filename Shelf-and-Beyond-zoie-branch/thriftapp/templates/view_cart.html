@@ -1,0 +1,58 @@
+{% extends "base2.html" %}
+
+{% block content %}
+
+<div class="centered-content">
+    <h2>Your Shopping Cart</h2>
+
+    <div class="cart-text-box">
+        <div class="cart-text-container">
+            <div class="cart-listing">
+                {% if listings %}
+                    <ul>
+                        {% for listing in listings %}
+                            <li>
+                                <div class="one-cart-listing">
+                                    <div class="listing-info">
+                                        <p><strong>Item:</strong> {{ listing.title }} (ID: {{ listing.listing_id }})</p>
+                                        <p><strong>Price:</strong> {{ listing.price }} BDT</p>
+                                    </div>
+                                    <div class="auth-buttons">
+                                        <form action="{% url 'remove_from_cart' %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="listing_id" value="{{ listing.listing_id }}">
+                                            <button type="submit">Remove</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <br>
+
+                <div class="auth-buttons">
+                    
+
+                    <form action="{% url 'checkout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Checkout</button>
+                    </form>
+                </div>
+
+                <br>
+
+                <a href="{% url 'view_purchase_history' %}" style="color: black; text-decoration: underline; font-weight: bold; font-family: 'Georgia', serif;">
+                    View Purchase History
+                </a>
+
+                {% else %}
+                    <p>Your cart is empty.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

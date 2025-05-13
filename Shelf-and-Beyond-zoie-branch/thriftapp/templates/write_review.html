@@ -1,0 +1,50 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+<div class="review-form-container">
+    <h2>Write a review for "{{ listing.title }}"</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="rating">Rating (1–5):</label>
+        <input type="number" name="rating" min="1" max="5" required><br><br>
+
+        <label for="comment">Comment:</label><br>
+        <textarea name="comment" rows="4" cols="50"></textarea><br><br>
+
+        <button type="submit">Submit Review</button>
+        <button type="button" onclick="history.back()" class="go-back-button">Go Back</button>
+    </form>
+</div>
+
+<style>
+.review-form-container {
+    background-color: #f1d6b4;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    margin: auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1a66d;
+    border-radius: 5px;
+}
+button {
+    background-color: #ba8c63;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button.go-back-button {
+    background-color: #999;
+}
+</style>
+
+{% endblock %}

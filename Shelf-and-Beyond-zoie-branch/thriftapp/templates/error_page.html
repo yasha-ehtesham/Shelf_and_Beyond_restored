@@ -1,0 +1,19 @@
+{% extends "base2.html" %}
+
+{% block content %}
+<div class="error-container">
+    <h2>Error</h2>
+    <p>{{ message }}</p>
+    <a href="{% url 'home' %}">Go back to the homepage</a>
+</div>
+
+<style>
+.error-container {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #f1c1c1;
+    background-color: #f8d7da;
+    border-radius: 5px;
+}
+</style>
+{% endblock %}

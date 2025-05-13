@@ -1,0 +1,185 @@
+{% extends "base2.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+        }
+
+        /* Main content styling */
+        .main-content { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 15px; 
+            margin-left: 150px; /* Sidebar width */
+        }
+
+        .sidebar-content {
+            width: 30%;
+        }
+
+        .preview-content {
+            width: 60%;
+            background-color: #E4C59E;
+            color: #682b2b; /* Apply color to all text within preview-content */
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #d9b27f;
+            margin-bottom: 10px; /* Reduced gap between form fields */
+            padding: 8px 12px;
+        }
+
+        .mb-3 {
+            margin-bottom: 10px; /* Reduce bottom margin for form fields */
+        }
+
+        /* Smaller Description Box */
+        #id_description {
+            height: 50px;  /* Half the original height */
+            resize: vertical;  /* Allow resizing only vertically */
+        }
+
+        /* Preview Box styling */
+        .preview-box {
+            border: 2px dashed #ba8c63;
+            padding: 10px;
+            border-radius: 15px;
+            min-height: 400px;
+        }
+
+        .img-preview-container {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border: 2px dashed #ba8c63;
+            padding: 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .img-preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        .preview-content .text-muted {
+            color: #682b2b !important; /* Override Bootstrap's text-muted */
+            opacity: 0.7; /* Maintain muted effect with custom color */
+        }
+
+        .img-preview-container span {
+            color: #682b2b; /* Ensure placeholder text matches */
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+
+        <!-- Sidebar Content -->
+        <div class="sidebar-content">
+            <h4>📚 Book for Sale</h4>
+            <form method="POST" enctype="multipart/form-data" id="listingForm" action="{% url 'create_listing' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.image.id_for_label }}" class="form-label">Upload Image</label>
+                    {{ form.image }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.author.id_for_label }}" class="form-label">Author Name</label>
+                    {{ form.author }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.price.id_for_label }}" class="form-label">Price</label>
+                    {{ form.price }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.condition.id_for_label }}" class="form-label">Condition</label>
+                    {{ form.condition }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                    {{ form.description }}
+                </div>
+
+                <button type="submit" class="btn btn-dark mt-3">Add Listing</button>
+            </form>
+        </div>
+
+        <!-- Preview Content -->
+        <div class="preview-content">
+            <div class="preview-box text-center">
+                <h4>Your Listing Preview</h4>
+                <p class="text-muted">As you create your listing, preview how it will appear to others.</p>
+                <div id="preview-content">
+                    <div class="img-preview-container" id="img-preview">
+                        <span>No image uploaded yet.</span>
+                    </div>
+                    <p><strong>Title:</strong> <span id="preview-title"></span></p>
+                    <p><strong>Author:</strong> <span id="preview-author"></span></p>
+                    <p><strong>Description:</strong> <span id="preview-description"></span></p>
+                    <p><strong>Price:</strong> <span id="preview-price"></span></p>
+                    <p><strong>Condition:</strong> <span id="preview-condition"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const titleField = document.getElementById('id_title');
+        const priceField = document.getElementById('id_price');
+        const authorField = document.getElementById('id_author');
+        const conditionField = document.getElementById('id_condition');
+        const descriptionField = document.getElementById('id_description');
+        const imgPreview = document.getElementById('img-preview');
+
+        function updatePreview() {
+            document.getElementById('preview-title').textContent = titleField.value;
+            document.getElementById('preview-description').textContent = descriptionField.value;
+            document.getElementById('preview-author').textContent = authorField.value;
+            document.getElementById('preview-price').textContent = priceField.value ? priceField.value + ' BDT' : '';
+            document.getElementById('preview-condition').textContent = conditionField.options[conditionField.selectedIndex].text;
+        }
+
+        function previewImage() {
+            const file = document.getElementById('id_image').files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+                imgPreview.innerHTML = `<img src="${reader.result}" alt="Image preview" />`;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                imgPreview.innerHTML = `<span>No image uploaded yet.</span>`;
+            }
+        }
+
+        titleField.addEventListener('input', updatePreview);
+        priceField.addEventListener('input', updatePreview);
+        authorField.addEventListener('input', updatePreview);
+        conditionField.addEventListener('change', updatePreview);
+        descriptionField.addEventListener('input', updatePreview);
+        document.getElementById('id_image').addEventListener('change', previewImage);
+    </script>
+
+</body>
+</html>
+{% endblock %}
